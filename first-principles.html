@@ -21,7 +21,10 @@
         .code-block { background-color: #1a202c; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; position: relative; }
         .copy-btn { position: absolute; top: 5px; right: 5px; background: #4a5568; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .copy-btn:hover { background: #2d3748; }
+        .mermaid { display: flex; justify-content: center; background: #f8fafc; padding: 15px; border-radius: 6px; margin: 15px 0; font-family: monospace; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
 </head>
 <body>
     <div class="nav-bar">
@@ -45,24 +48,85 @@
         <div class="card" id="isolation">
             <h2>1. Process Isolation (Containers)</h2>
             <p><strong>The Core Problem:</strong> Applications often crash because the environment they are deployed in (the server) has different libraries or versions than the environment they were developed in (the laptop).</p>
+            
+            <div class="mermaid">
+            flowchart LR
+                subgraph Laptop
+                App1[Your App] --> Lib1[Libs & Runtime]
+                end
+                
+                subgraph "Server (Without Containers)"
+                App2[Your App] -.-> Lib2[Different System Libs\n💥 CRASH]
+                end
+
+                subgraph "Server (With Podman)"
+                Box[Container Box] --> ServerOS[Host OS]
+                App3[Your App] --> Lib3[Libs & Runtime]
+                Lib3 -.-> Box
+                App3 -.-> Box
+                end
+            </div>
+
             <p><strong>First Principles Solution:</strong> Don't just ship the code; ship the entire filesystem, libraries, and runtime. This is achieved using Linux namespaces and cgroups, which isolate processes from each other so they think they have the entire computer to themselves. <strong>Podman</strong> creates these isolated boxes without needing a central "boss" (daemon) to manage them.</p>
         </div>
 
         <div class="card" id="multi-model">
             <h2>2. Data Locality & Multi-Model Architecture</h2>
             <p><strong>The Core Problem:</strong> Modern apps need different ways to query data. A user profile is a "Document". Their friend network is a "Graph". Storing these in two separate databases means copying data across a network (causing latency and synchronization bugs).</p>
+            
+            <div class="mermaid">
+            flowchart TD
+                subgraph "Traditional (Network Hop Latency)"
+                App1[App] --> |Query| DB1[(Document DB)]
+                App1 --> |Query| DB2[(Graph DB)]
+                DB1 -.-> |Sync/Network Delay| DB2
+                end
+                
+                subgraph "ArangoDB (Zero Hop Latency)"
+                App2[App] --> |AQL Query| Arango[(ArangoDB Core)]
+                Arango --> DocView[Document View]
+                Arango --> GraphView[Graph View]
+                end
+            </div>
+
             <p><strong>First Principles Solution:</strong> Bring the querying engine to the data, rather than the data to the engine. By using a <strong>Multi-Model Database like ArangoDB</strong>, data is stored once, but can be viewed and queried as a document, a graph, or a key-value store, resulting in zero network-hop latency between data domains.</p>
         </div>
 
         <div class="card" id="edge-computing">
             <h2>3. The Speed of Light & Edge Computing</h2>
             <p><strong>The Core Problem:</strong> Information cannot travel faster than the speed of light. If a user in Tokyo clicks a button, and the server is in New York, the data physically takes too long to travel back and forth, resulting in noticeable lag (latency).</p>
+            
+            <div class="mermaid">
+            flowchart LR
+                subgraph "Centralized Cloud"
+                User1[User in Tokyo] -->|200ms ping| Server1[Server in NY]
+                end
+                
+                subgraph "Fly.io Edge Cloud"
+                User2[User in Tokyo] -->|10ms ping| Edge[Edge Server in Tokyo]
+                Edge -.->|Syncs quietly| Core[Core DB in NY]
+                end
+            </div>
+
             <p><strong>First Principles Solution:</strong> Move the computer closer to the human. <strong>Fly.io</strong> achieves this by converting containers into highly optimized micro-VMs that boot in milliseconds on servers located physically in Tokyo, London, Sydney, etc. This ensures the physical distance the data must travel is minimal.</p>
         </div>
 
         <div class="card" id="emulation">
             <h2>4. Hardware Emulation (QEMU)</h2>
             <p><strong>The Core Problem:</strong> An Apple Silicon Mac uses an ARM-based processor. Cloud servers typically use AMD/Intel (x86_64) processors. Code compiled for one physically cannot be understood by the other.</p>
+            
+            <div class="mermaid">
+            flowchart TD
+                subgraph "Apple Silicon Mac"
+                Code[x86_64 Container Image] --> QEMU[QEMU Emulator]
+                QEMU --> |Translates to ARM| M1[Apple M1/M2/M3 Chip]
+                end
+                
+                subgraph "Fly.io Cloud"
+                Code2[x86_64 Container Image] --> Intel[AMD/Intel Server Chip]
+                end
+            </div>
+
             <p><strong>First Principles Solution:</strong> Introduce a translator. When we use <strong>Podman Machine</strong> on macOS, it utilizes QEMU, a software emulator that translates x86 instructions into ARM instructions on the fly, allowing developers to test exact cloud replicas on completely different hardware.</p>
         </div>
     </div>
