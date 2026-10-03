@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Podman Installation</title>
+    <title>Podman Desktop</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; line-height: 1.6; }
         .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -23,6 +23,7 @@
         footer { text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px; }
         footer a { color: #63b3ed; text-decoration: none; }
         footer a:hover { text-decoration: underline; }
+        .hero-image { max-width: 100%; border-radius: 8px; margin-bottom: 20px; border: 1px solid #cbd5e0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -45,41 +46,30 @@
     </div>
 
     <div class="container">
-        <h1>✅ How to Test Your Podman Installation</h1>
+        <h1>🖥️ Podman Desktop</h1>
         
         <div class="card">
-            <h2>Why can't I "see" Podman?</h2>
-            <p>Unlike Docker Desktop, which has a graphical user interface (GUI) running in your Mac's menu bar, <strong>Podman is a daemonless, CLI-first tool</strong>. This means you will not see an app icon running in your dock. It runs efficiently in the background as a lightweight QEMU virtual machine.</p>
-            <p>If you prefer a GUI to see your containers visually, you can install <a href="https://podman-desktop.io/" target="_blank">Podman Desktop</a>, but it is strictly optional.</p>
+            <h2>What is Podman Desktop?</h2>
+            <p>If you miss the visual interface of Docker Desktop, <strong>Podman Desktop</strong> is the official open-source GUI for managing your Podman containers, images, and pods without needing to use the terminal.</p>
+            <div style="text-align: center;">
+                <img src="https://podman-desktop.io/img/screenshots/containers.png" alt="Podman Desktop GUI Interface" class="hero-image">
+            </div>
         </div>
 
         <div class="card">
-            <h2>Step 1: Verify the CLI is Installed</h2>
-            <p>Open your terminal and check if the podman command exists on your system:</p>
-            <div class="code-block">podman --version</div>
-            <p><em>Expected Output:</em> <code>podman version 5.x.x</code></p>
+            <h2>Installation via Homebrew</h2>
+            <p>You can easily install Podman Desktop using Homebrew alongside your existing CLI installation.</p>
+            <div class="code-block">brew install podman-desktop</div>
         </div>
 
         <div class="card">
-            <h2>Step 2: Check the Podman Machine Status</h2>
-            <p>Because macOS isn't Linux, Podman needs a tiny background VM to run containers. Check if it's running:</p>
-            <div class="code-block">podman machine list</div>
-            <p><em>Expected Output:</em> You should see <code>podman-machine-default</code> with a <code>*</code> next to it, and the state should say <code>Currently running</code>.</p>
-            <p><strong>If it's stopped, start it:</strong></p>
-            <div class="code-block">podman machine start</div>
-        </div>
-
-        <div class="card">
-            <h2>Step 3: Run a Test Container</h2>
-            <p>The ultimate test is pulling and running a container from the internet. Run the standard hello-world container:</p>
-            <div class="code-block">podman run --rm hello-world</div>
-            <p><em>Expected Output:</em> A message saying <code>Hello from Docker! This message shows that your installation appears to be working correctly.</code></p>
-        </div>
-
-        <div class="card">
-            <h2>Step 4: Check Active Containers</h2>
-            <p>To see containers that are currently running in the background (like our ArangoDB instance):</p>
-            <div class="code-block">podman ps</div>
+            <h2>Why Use the Desktop App?</h2>
+            <ul>
+                <li><strong>Visual Container Management:</strong> Easily start, stop, and delete containers with a click.</li>
+                <li><strong>Real-time Logs:</strong> View ArangoDB or your Python dashboard logs visually without running <code>podman logs -f</code>.</li>
+                <li><strong>Network & Volume Inspector:</strong> View exposed ports and mounted directories (like our <code>nz-energy.json</code> data volume).</li>
+                <li><strong>Pod Generation:</strong> Generate Kubernetes YAML from your locally running containers natively.</li>
+            </ul>
         </div>
     </div>
 
@@ -115,7 +105,7 @@
             else if (query.includes('first') || query.includes('principle')) window.location.href = 'first-principles.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
-            else alert('No specific page found for: ' + query + '. Try searching for test, podman, fly, arango, metadata, or use cases.');
+            else alert('No specific page found for: ' + query + '. Try searching for desktop, test, podman, fly, arango, metadata, or use cases.');
         }
 
         // Add copy buttons to code blocks

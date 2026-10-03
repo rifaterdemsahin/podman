@@ -23,6 +23,7 @@
             footer { text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px; }
         footer a { color: #63b3ed; text-decoration: none; }
         footer a:hover { text-decoration: underline; }
+            .hero-image { max-width: 100%; height: auto; max-height: 150px; display: block; margin: 0 auto 20px; }
     </style>
 </head>
 <body>
@@ -30,10 +31,11 @@
         <div class="nav-links">
             <a href="index.html">🏠 Dashboard</a>
             <a href="first-principles.html">📚 First Principles</a>
-            <a href="metadata.html">📊 Metadata Analysis</a>
+            <a href="metadata.html">📊 Metadata</a>
             <a href="testing.html">✅ Test Install</a>
             <a href="usecases.html">💡 Use Cases</a>
             <a href="podman.html">🐋 Podman</a>
+            <a href="podmandesktop.html">🖥️ Desktop</a>
             <a href="flyio.html">☁️ Fly.io</a>
             <a href="arangodb.html">🥑 ArangoDB</a>
         </div>
@@ -45,6 +47,7 @@
 
     <div class="container">
         <h1>🐋 Concept: Podman</h1>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Podman_logo.svg/512px-Podman_logo.svg.png" alt="Podman Logo" class="hero-image">
         <div class="card">
             <h2>What is Podman?</h2>
             <p><strong>Podman</strong> is a daemonless container engine for developing, managing, and running OCI Containers on your Linux System (or macOS/Windows via Podman Machine). It serves as a direct drop-in replacement for Docker.</p>
@@ -91,6 +94,7 @@
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             if (query.includes('podman') || query.includes('docker') || query.includes('container')) window.location.href = 'podman.html';
+            else if (query.includes('desktop') || query.includes('gui')) window.location.href = 'podmandesktop.html';
             else if (query.includes('test') || query.includes('install') || query.includes('verify')) window.location.href = 'testing.html';
             else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';

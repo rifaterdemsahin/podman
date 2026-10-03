@@ -33,10 +33,11 @@
         <div class="nav-links">
             <a href="index.html">🏠 Dashboard</a>
             <a href="first-principles.html">📚 First Principles</a>
-            <a href="metadata.html">📊 Metadata Analysis</a>
+            <a href="metadata.html">📊 Metadata</a>
             <a href="testing.html">✅ Test Install</a>
             <a href="usecases.html">💡 Use Cases</a>
             <a href="podman.html">🐋 Podman</a>
+            <a href="podmandesktop.html">🖥️ Desktop</a>
             <a href="flyio.html">☁️ Fly.io</a>
             <a href="arangodb.html">🥑 ArangoDB</a>
         </div>
@@ -155,6 +156,7 @@ podman run --rm -v $(pwd):/data:Z \
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             if (query.includes('podman') || query.includes('docker') || query.includes('container')) window.location.href = 'podman.html';
+            else if (query.includes('desktop') || query.includes('gui')) window.location.href = 'podmandesktop.html';
             else if (query.includes('test') || query.includes('install') || query.includes('verify')) window.location.href = 'testing.html';
             else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
