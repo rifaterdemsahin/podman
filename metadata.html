@@ -61,6 +61,8 @@
             .search-container { width: 100%; justify-content: space-between; }
             .container { margin: 10px; padding: 15px; }
         }
+            .bidirectional-links { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: bold; }
+        @media (max-width: 768px) { .bidirectional-links { flex-direction: column; gap: 10px; } }
     </style>
 
 
@@ -88,6 +90,7 @@
                     <a href="first-principles.html">First Principles</a>
                     <a href="usecases.html">Use Cases</a>
                     <a href="metadata.html">Metadata Analysis</a>
+                    <a href="references.html">References</a>
                 </div>
             </div>
 
@@ -192,9 +195,12 @@ podman run --rm -v $(pwd):/data:Z \
             
             <p><em>Notice the use of <code>host.containers.internal</code>, which allows the ephemeral import container to speak directly to the long-running ArangoDB container on your machine safely.</em></p>
         </div>
+        <div class="bidirectional-links">
+            <a href="usecases.html">⬅️ Previous: Use Cases</a>
+            <a href="references.html">Next: References ➡️</a>
+        </div>
     </div>
 
-    
     <footer>
         <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
         <p style="margin-top: 10px;">
@@ -229,6 +235,7 @@ podman run --rm -v $(pwd):/data:Z \
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
             else if (query.includes('first') || query.includes('principle')) window.location.href = 'first-principles.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
+            else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
             else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, metadata, or use cases.');
         }

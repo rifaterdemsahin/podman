@@ -61,6 +61,8 @@
             .search-container { width: 100%; justify-content: space-between; }
             .container { margin: 10px; padding: 15px; }
         }
+            .bidirectional-links { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: bold; }
+        @media (max-width: 768px) { .bidirectional-links { flex-direction: column; gap: 10px; } }
     </style>
 
 
@@ -88,6 +90,7 @@
                     <a href="first-principles.html">First Principles</a>
                     <a href="usecases.html">Use Cases</a>
                     <a href="metadata.html">Metadata Analysis</a>
+                    <a href="references.html">References</a>
                 </div>
             </div>
 
@@ -125,10 +128,12 @@
             <h2>AI & Graph Neural Networks</h2>
             <p>Through <a href="https://arango.ai/">Arango.ai</a> and its ecosystem, it natively supports exporting graphs for Machine Learning pipelines, running Graph Neural Networks (GNNs), and similarity searches. Storing both the properties (documents) and relationships (graphs) locally makes it incredibly fast to train context-aware AI models directly inside a Podman container.</p>
         </div>
+        <div class="bidirectional-links">
+            <a href="podmandesktop.html">⬅️ Previous: Podman Desktop</a>
+            <a href="flyio.html">Next: Fly.io ➡️</a>
+        </div>
     </div>
 
-    
-    
     <footer>
         <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
         <p style="margin-top: 10px;">
@@ -161,6 +166,7 @@
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
+            else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
             else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
         }

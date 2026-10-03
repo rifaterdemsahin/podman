@@ -61,6 +61,8 @@
             .search-container { width: 100%; justify-content: space-between; }
             .container { margin: 10px; padding: 15px; }
         }
+            .bidirectional-links { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: bold; }
+        @media (max-width: 768px) { .bidirectional-links { flex-direction: column; gap: 10px; } }
     </style>
 
 
@@ -88,6 +90,7 @@
                     <a href="first-principles.html">First Principles</a>
                     <a href="usecases.html">Use Cases</a>
                     <a href="metadata.html">Metadata Analysis</a>
+                    <a href="references.html">References</a>
                 </div>
             </div>
 
@@ -125,10 +128,12 @@
             <h2>Why Pair it with Podman? <a href="first-principles.html#emulation" style="font-size: 16px; text-decoration: none;">[🤔 Rationale]</a></h2>
             <p>Because Fly.io builds and deploys standard Docker/OCI images targeting the <code>linux/amd64</code> architecture, developers using Apple Silicon (M1/M2/M3) need a reliable way to emulate and test that architecture locally. Podman natively integrates with QEMU to run <code>amd64</code> containers on Macs, ensuring parity between your local environment and Fly.io's production servers.</p>
         </div>
+        <div class="bidirectional-links">
+            <a href="arangodb.html">⬅️ Previous: ArangoDB</a>
+            <a href="testing.html">Next: Testing & Verification ➡️</a>
+        </div>
     </div>
 
-    
-    
     <footer>
         <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
         <p style="margin-top: 10px;">
@@ -161,6 +166,7 @@
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
+            else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
             else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
         }
