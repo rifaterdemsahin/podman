@@ -67,6 +67,11 @@
         .nav-links a.active, .dropdown.active .dropbtn { color: #63b3ed; text-decoration: underline; text-underline-offset: 4px; decoration-thickness: 2px; }
         .dropdown-content a.active { background-color: var(--bg-color); border-left: 4px solid #63b3ed; font-weight: bold; text-decoration: none; }
         .dropdown:hover .dropbtn { text-decoration: underline; text-underline-offset: 4px; }
+    
+        .tooltip { position: relative; border-bottom: 1px dotted var(--link-color); cursor: help; color: var(--link-color); font-weight: 500; }
+        .tooltip::after { content: attr(data-text); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background-color: var(--nav-bg); color: var(--nav-text); padding: 8px 12px; border-radius: 6px; width: max-content; max-width: 250px; white-space: normal; line-height: 1.4; text-align: center; font-size: 13px; font-weight: normal; opacity: 0; visibility: hidden; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 1000; pointer-events: none; }
+        .tooltip::before { content: ""; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid; border-color: var(--nav-bg) transparent transparent transparent; opacity: 0; visibility: hidden; transition: 0.2s; z-index: 1000; }
+        .tooltip:hover::after, .tooltip:hover::before { opacity: 1; visibility: visible; bottom: 140%; }
     </style>
 
 
@@ -302,6 +307,34 @@ podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arango
                         dropdown.classList.add('active');
                     }
                 }
+            });
+        });
+    </script>
+
+    <script>
+        const tooltips = {
+            "Podman": "A secure, daemonless container engine.",
+            "daemonless": "Runs without a continuous root background process (daemon), massively improving security.",
+            "ArangoDB": "A native multi-model graph and document database.",
+            "AQL": "ArangoDB Query Language: Used for deep graph traversals.",
+            "Graph-RAG": "Using graph databases to fetch perfect context for AI models, preventing hallucinations.",
+            "LLMs": "Large Language Models (like ChatGPT or Claude).",
+            "Second Brains": "A digital repository of interconnected knowledge and notes.",
+            "Edge Computing": "Running servers physically close to the user (e.g. in their city) to eliminate lag.",
+            "Anycast": "Network routing that automatically connects a user to the nearest global server.",
+            "Firecracker": "Micro-VM technology for instant, highly-secure virtual machines."
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const elements = document.querySelectorAll('.card p, .card li');
+            elements.forEach(el => {
+                let html = el.innerHTML;
+                for (const [term, explanation] of Object.entries(tooltips)) {
+                    // Regex ensures we only replace words not already inside an HTML tag attribute
+                    const regex = new RegExp(`\\b(${term})\\b(?![^<]*>|[^<>]*<\/span>)`, 'g');
+                    html = html.replace(regex, `<span class="tooltip" data-text="${explanation}">$1</span>`);
+                }
+                el.innerHTML = html;
             });
         });
     </script>

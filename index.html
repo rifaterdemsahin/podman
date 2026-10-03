@@ -67,6 +67,11 @@
         .nav-links a.active, .dropdown.active .dropbtn { color: #63b3ed; text-decoration: underline; text-underline-offset: 4px; decoration-thickness: 2px; }
         .dropdown-content a.active { background-color: var(--bg-color); border-left: 4px solid #63b3ed; font-weight: bold; text-decoration: none; }
         .dropdown:hover .dropbtn { text-decoration: underline; text-underline-offset: 4px; }
+    
+        .tooltip { position: relative; border-bottom: 1px dotted var(--link-color); cursor: help; color: var(--link-color); font-weight: 500; }
+        .tooltip::after { content: attr(data-text); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background-color: var(--nav-bg); color: var(--nav-text); padding: 8px 12px; border-radius: 6px; width: max-content; max-width: 250px; white-space: normal; line-height: 1.4; text-align: center; font-size: 13px; font-weight: normal; opacity: 0; visibility: hidden; transition: 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 1000; pointer-events: none; }
+        .tooltip::before { content: ""; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid; border-color: var(--nav-bg) transparent transparent transparent; opacity: 0; visibility: hidden; transition: 0.2s; z-index: 1000; }
+        .tooltip:hover::after, .tooltip:hover::before { opacity: 1; visibility: visible; bottom: 140%; }
     </style>
 
 
