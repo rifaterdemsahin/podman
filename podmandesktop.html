@@ -131,6 +131,17 @@
         </div>
 
         <div class="card">
+            <h2>Understanding the Installation Stages</h2>
+            <p>When you run <code>brew install podman-desktop</code>, you may see several terminal messages. Here is exactly what is happening under the hood:</p>
+            <ul>
+                <li><strong>Downloading Homebrew API data:</strong> Homebrew is syncing its package catalog to ensure it fetches the absolute latest version of Podman Desktop (v1.29.3 or newer).</li>
+                <li><strong>Untrusted Taps Warning:</strong> If you see a warning about taps like <code>anomalyco/tap</code>, it just means you have third-party repositories connected to Homebrew. It doesn't affect Podman Desktop, which is securely downloaded from the official core registry.</li>
+                <li><strong>Fetching & Extracting (236MB):</strong> Homebrew downloads the compiled <code>.dmg</code> or binary package directly from Podman's official release servers and unpacks it into your <code>/Applications</code> folder.</li>
+            </ul>
+            <p>Once complete, you can find the GUI application by opening your Mac's <strong>Launchpad</strong> or navigating to <code>/Applications/Podman Desktop.app</code>.</p>
+        </div>
+
+        <div class="card">
             <h2>Why Use the Desktop App?</h2>
             <ul>
                 <li><strong>Visual Container Management:</strong> Easily start, stop, and delete containers with a click.</li>

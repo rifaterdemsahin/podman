@@ -66,3 +66,8 @@ git commit -m "Update Podman and ArangoDB configurations"
 git push origin main
 ```
 - [`testing.html`](https://rifaterdemsahin.github.io/podman/testing.html): Step-by-step guide to verify if Podman is correctly running on your Mac.
+### Stage 5: Podman Desktop GUI
+Optionally, install the visual interface if you prefer managing containers outside the terminal.
+```bash
+brew install podman-desktop
+```
