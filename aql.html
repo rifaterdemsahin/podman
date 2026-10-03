@@ -57,6 +57,10 @@
             .container { margin: 10px; padding: 15px; }
             .bidirectional-links { flex-direction: column; gap: 10px; }
         }
+    
+        .nav-links a.active, .dropdown.active .dropbtn { color: #63b3ed; text-decoration: underline; text-underline-offset: 4px; decoration-thickness: 2px; }
+        .dropdown-content a.active { background-color: var(--bg-color); border-left: 4px solid #63b3ed; font-weight: bold; text-decoration: none; }
+        .dropdown:hover .dropbtn { text-decoration: underline; text-underline-offset: 4px; }
     </style>
     <script>
         const savedTheme = localStorage.getItem('theme') || 'light';
@@ -78,22 +82,22 @@
             <div class="dropdown">
                 <button class="dropbtn">📚 Guides & Concepts</button>
                 <div class="dropdown-content">
-                    <a href="first-principles.html">First Principles</a>
-                    <a href="usecases.html">Use Cases</a>
-                    <a href="metadata.html">Metadata Analysis</a>
-                    <a href="aql.html">AQL & Second Brains</a>
-                    <a href="references.html">References</a>
+                    <a href="first-principles.html">💡 First Principles</a>
+                    <a href="usecases.html">🏗️ Use Cases</a>
+                    <a href="metadata.html">📊 Metadata Analysis</a>
+                    <a href="aql.html">🧠 AQL & Second Brains</a>
+                    <a href="references.html">📖 References</a>
                 </div>
             </div>
 
             <div class="dropdown">
                 <button class="dropbtn">🛠️ Tools & Stack</button>
                 <div class="dropdown-content">
-                    <a href="status.html">System Status</a>
-                    <a href="podman.html">Podman CLI</a>
-                    <a href="podmandesktop.html">Podman Desktop</a>
-                    <a href="flyio.html">Fly.io Edge</a>
-                    <a href="arangodb.html">ArangoDB</a>
+                    <a href="status.html">📈 System Status</a>
+                    <a href="podman.html">🐋 Podman CLI</a>
+                    <a href="podmandesktop.html">🖥️ Podman Desktop</a>
+                    <a href="flyio.html">☁️ Fly.io Edge</a>
+                    <a href="arangodb.html">🥑 ArangoDB</a>
                 </div>
             </div>
 
@@ -175,6 +179,21 @@ FOR v, e IN OUTBOUND SHORTEST_PATH
                 });
             };
             block.appendChild(btn);
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                    const dropdown = link.closest('.dropdown');
+                    if (dropdown) {
+                        dropdown.classList.add('active');
+                    }
+                }
+            });
         });
     </script>
 </body>
