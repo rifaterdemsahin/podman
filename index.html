@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podman & Fly.io Local Debugging</title>
+    <title>Podman & ArangoDB Local Debugging</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f9; color: #333; line-height: 1.6; }
         .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { color: #5a67d8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         h2 { color: #2d3748; margin-top: 30px; }
         .card { background: #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-        .code-block { background-color: #1a202c; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: "Courier New", Courier, monospace; }
+        .code-block { background-color: #1a202c; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: "Courier New", Courier, monospace; font-size: 14px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e0; }
         th { background-color: #e2e8f0; }
@@ -18,26 +18,30 @@
         .status-red { background-color: #e53e3e; }
         .status-green { background-color: #48bb78; }
         .use-case { border-left: 4px solid #5a67d8; padding-left: 15px; margin-bottom: 15px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 15px; text-decoration: none; color: #5a67d8; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Podman & Fly.io Guide & Dashboard</h1>
-        
+        <h1>Podman & ArangoDB Integration Dashboard</h1>
+
         <div class="card">
             <h2>Current Install Status</h2>
-            <p><span class="status-dot status-red"></span> <strong>Podman State:</strong> Not Installed / Not Running</p>
-            <p>We ran a background check and couldn't find an active Podman machine. Please follow the installation steps below.</p>
+            <p><span class="status-dot status-green"></span> <strong>Podman State:</strong> Installed & Running</p>
+            <p><span class="status-dot status-green"></span> <strong>ArangoDB Container:</strong> Running on port 8529</p>
+            <p><strong>Connection string:</strong> <code>http://localhost:8529</code></p>
+            <p><strong>Username:</strong> <code>root</code> | <strong>Password:</strong> <code>password</code></p>
         </div>
 
         <div class="card">
-            <h2>1. Installation Commands</h2>
-            <p>If you don't have Podman and Flyctl installed, run the following commands to install and initialize the environment on macOS:</p>
+            <h2>Stage 1: Podman Installation & Initialization</h2>
+            <p>Here are the steps we took to get Podman running on macOS:</p>
             <div class="code-block">
-# 1. Install Podman and Flyctl via Homebrew
+# 1. Install Podman and Flyctl
 brew install podman flyctl
 
-# 2. Initialize a Podman machine (allocate CPUs and memory)
+# 2. Initialize a Podman machine (allocated 2 CPUs and 4GB memory)
 podman machine init --cpus 2 --memory 4096 --rootful=false
 
 # 3. Start the Podman machine
@@ -46,52 +50,40 @@ podman machine start
         </div>
 
         <div class="card">
-            <h2>2. Step-by-Step: Pulling Images & Debugging</h2>
-            <p>Follow these steps to pull a remote Fly.io image and debug it locally using Podman:</p>
-            
-            <h3>Step A: Authenticate with Fly.io</h3>
-            <div class="code-block">fly auth login</div>
-
-            <h3>Step B: Pull Remote Images</h3>
-            <p>Find your image URL from Fly.io and pull it using Podman (we use the AMD64 architecture flag to match Fly.io environments):</p>
+            <h2>Stage 2: ArangoDB Container Deployment</h2>
+            <p>We pulled the official ArangoDB image and started it up with the following command:</p>
             <div class="code-block">
-# Show the currently deployed image on Fly.io
-fly image show
-
-# Pull the image locally
-podman pull --arch amd64 registry.fly.io/your-app-name:deployment-01
+podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arangodb
             </div>
-
-            <h3>Step C: Run and Debug</h3>
-            <p>Run the container locally and expose its ports. Use interactive mode to get inside the shell:</p>
+            
+            <h3>ArangoDB Container Logs</h3>
+            <p>Recent startup logs from the <code>arango</code> container:</p>
             <div class="code-block">
-# Run the app in detached mode, exposing port 8080
-podman run -d -p 8080:8080 --name local-debug-app registry.fly.io/your-app-name:deployment-01
-
-# View realtime logs to spot startup errors
-podman logs -f local-debug-app
-
-# Execute into the container to inspect the filesystem
-podman exec -it local-debug-app /bin/sh
+2026-10-03T08:11:32.810582Z [1-2] INFO [25362] {memory} Available physical memory: 4077903872 bytes, available cores: 2
+2026-10-03T08:11:32.823301Z [1-2] INFO [3bb7d] {cluster} Starting up with role SINGLE
+2026-10-03T08:11:32.886304Z [1-2] INFO [a4ec8] {engines} RocksDB recovery finished...
+2026-10-03T08:11:32.991825Z [1-2] INFO [6ea38] {general} using endpoint 'http+tcp://0.0.0.0:8529' for non-encrypted requests
+2026-10-03T08:11:33.001279Z [1-2] INFO [cf3f4] {general} ArangoDB (version 3.12.12 enterprise [linux]) is ready for business. Have fun!
             </div>
         </div>
 
         <div class="card">
-            <h2>3. Common Use Cases</h2>
+            <h2>Stage 3: ArangoDB Use Cases (<a href="https://arango.ai/" target="_blank">arango.ai</a>)</h2>
+            <p>ArangoDB is a scalable, fully managed multi-model database (document, graph, and key-value). Here is how you can use it locally with Podman:</p>
             
             <div class="use-case">
-                <strong>Use Case 1: Testing Multi-Arch Builds on Apple Silicon</strong>
-                <p>Developers on M1/M2/M3 Macs need to ensure their containers run properly on Fly.io's Intel/AMD servers. By using Podman's QEMU integration, developers can test the exact <code>linux/amd64</code> environment locally without pushing broken builds to production.</p>
+                <strong>1. Graph Neural Networks & AI App Development</strong>
+                <p>Using <a href="https://arango.ai/">Arango.ai</a> integrations, developers can spin up a local graph database via Podman, inject test network data, and run AQL (ArangoDB Query Language) queries to test machine learning models locally before deploying them to Fly.io.</p>
             </div>
 
             <div class="use-case">
-                <strong>Use Case 2: Inspecting Environment Variables & Secrets</strong>
-                <p>When an app crashes on Fly.io due to missing environment variables, developers can run the image locally with Podman, passing in mock secrets (e.g. <code>podman run -e DATABASE_URL=mock...</code>) to replicate the failure and verify the fix before deploying.</p>
+                <strong>2. Multi-Model Data Testing</strong>
+                <p>Instead of running multiple containers for Redis (Key-Value) and MongoDB (Document), you can run a single ArangoDB container locally to handle unstructured JSON documents alongside highly relational graph data structures, significantly reducing local memory usage (fitting perfectly within our 4GB Podman limit).</p>
             </div>
 
             <div class="use-case">
-                <strong>Use Case 3: Offline Development</strong>
-                <p>Instead of relying on remote builders, a developer on a plane or without internet access can build the OCI container image locally via <code>podman build</code>, test it extensively, and defer the <code>fly deploy --local-only</code> execution until connectivity is restored.</p>
+                <strong>3. Testing AQL Query Performance</strong>
+                <p>Use the local container to access the ArangoDB Web Interface (on port 8529) to visualize graphs and EXPLAIN complex AQL queries. Because Podman closely mirrors Linux container environments on cloud providers, local performance tuning provides highly accurate estimates for production deployments.</p>
             </div>
         </div>
 

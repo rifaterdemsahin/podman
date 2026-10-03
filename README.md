@@ -1,43 +1,40 @@
-# Podman & Fly.io Local Debug Environment
+# Podman & Fly.io Local Debug Environment (ArangoDB Edition)
 
-This project provides a set of tools and configurations to run and debug containers locally on macOS (Intel or Apple Silicon) using **Podman** instead of Docker Desktop, tailored for deploying to **Fly.io**.
+This project provides a set of tools and configurations to run and debug containers locally on macOS using **Podman**, tailored for deploying to **Fly.io**, with a specific focus on running **ArangoDB** (https://arango.ai).
 
 ## Features
-- **No Docker Desktop required**: Runs purely on Podman (`podman-machine`).
-- **Fly.io Compatibility**: Designed to test images intended for Fly.io deployments.
-- **Cross-Architecture Support**: Built to handle `linux/amd64` using QEMU emulation if on Apple Silicon.
-- **Local Dashboard**: A simple `index.html` UI for container and status tracking.
+- **Podman Native**: Runs purely on Podman (`podman-machine`) - No Docker Desktop.
+- **ArangoDB Support**: Local instance of ArangoDB for Multi-Model Graph and Document database prototyping.
+- **Local Dashboard**: A simple `index.html` UI for container status and staged documentation.
 
-## Setup Instructions
+## Setup Stages
 
-### 1. Initialize Podman and Flyctl
-Run the included setup script to install dependencies, initialize Podman, and check Fly authentication:
+### Stage 1: Initialize Podman
+Run the setup script or run commands manually to install dependencies and initialize Podman.
 ```bash
-chmod +x setup-podman.sh
-./setup-podman.sh
+brew install podman flyctl
+podman machine init --cpus 2 --memory 4096 --rootful=false
+podman machine start
 ```
 
-### 2. Emulating Fly.io locally
-Use `flyctl` to fetch configuration and test locally with Podman. To build your Fly app locally:
+### Stage 2: Deploy ArangoDB Container
+We use Podman to pull and run ArangoDB.
 ```bash
-# Pull the latest image of your Fly app
-fly image show
-
-# Or build the app locally without deploying
-fly deploy --local-only
+podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arangodb
 ```
+*You can access the ArangoDB Web Interface by going to `http://localhost:8529` (User: `root`, Password: `password`).*
 
-### 3. Run the Debug Dashboard
-You can run a local server to view the dashboard:
+### Stage 3: Dashboard Interface
+You can run a local server to view the dashboard and logs:
 ```bash
 python3 -m http.server 30080
 ```
-Then navigate to `http://localhost:30080` in Google Chrome to view the emulated container statuses.
+Navigate to `http://localhost:30080` to view the emulated container statuses and ArangoDB use cases.
 
 ## Git Workflow
 To commit and push changes:
 ```bash
 git add .
-git commit -m "Update Podman and Fly.io configuration"
+git commit -m "Update Podman and ArangoDB configurations"
 git push origin main
 ```
