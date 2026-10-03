@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Use Cases & Architecture</title>
+    <title>First Principles</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; line-height: 1.6; }
         .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -14,12 +14,11 @@
         .search-container input { padding: 5px 10px; border-radius: 4px; border: none; }
         .search-container button { padding: 5px 10px; border-radius: 4px; border: none; background: #5a67d8; color: white; cursor: pointer; }
         .container { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
         h1 { color: #5a67d8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         h2 { color: #2d3748; margin-top: 30px; }
+        h3 { color: #4a5568; }
         .card { background: #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-        .diagram { font-family: monospace; background: #1a202c; color: #63b3ed; padding: 20px; border-radius: 6px; white-space: pre; overflow-x: auto; font-size: 16px; line-height: 1.4; }
-            .code-block { position: relative; }
+        .code-block { background-color: #1a202c; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; position: relative; }
         .copy-btn { position: absolute; top: 5px; right: 5px; background: #4a5568; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .copy-btn:hover { background: #2d3748; }
     </style>
@@ -41,42 +40,30 @@
     </div>
 
     <div class="container">
-        <h1>💡 ArangoDB Use Cases & Architecture</h1>
-
-        <div class="card">
-            <h2>🏗️ Why? How? What? (Architectural Overview)</h2>
-            <p>This architecture explains how Podman, Fly.io, and ArangoDB connect to provide a seamless local-to-cloud experience.</p>
-            
-            <div class="diagram">
-  💻 Developer Machine (macOS)
-   ├── 🐋 Podman (Local Container Runtime)
-   │    ├── 🥑 ArangoDB Container [Port 8529]  <-- (Multi-Model Graph DB)
-   │    └── 🌐 Local Dashboard    [Port 30080] <-- (You are here)
-   │
-   ╰──▶ 🚀 Flyctl (Deployment CLI)
-         │
-         ▼
-  ☁️ Fly.io Cloud Platform
-   ├── 📦 Deployed Dashboard App
-   └── 🗄️ Managed ArangoDB / Stateful Volume
-            </div>
-
-            <p><strong>❓ WHY:</strong> We avoid Docker Desktop licensing/overhead by using lightweight <code>podman-machine</code>. ArangoDB consolidates Document and Graph databases into one tool to save memory.</p>
-            <p><strong>🛠️ HOW:</strong> We emulate the <code>linux/amd64</code> architecture locally. Once tested, <code>flyctl</code> pushes the exact same image to Fly.io edge servers.</p>
-            <p><strong>🎯 WHAT:</strong> A reproducible multi-model database environment for building AI & Graph-based applications.</p>
+        <h1>📚 First Principles Understanding</h1>
+        
+        <div class="card" id="isolation">
+            <h2>1. Process Isolation (Containers)</h2>
+            <p><strong>The Core Problem:</strong> Applications often crash because the environment they are deployed in (the server) has different libraries or versions than the environment they were developed in (the laptop).</p>
+            <p><strong>First Principles Solution:</strong> Don't just ship the code; ship the entire filesystem, libraries, and runtime. This is achieved using Linux namespaces and cgroups, which isolate processes from each other so they think they have the entire computer to themselves. <strong>Podman</strong> creates these isolated boxes without needing a central "boss" (daemon) to manage them.</p>
         </div>
 
-        <div class="card">
-            <h2>🥑 Arango.ai Use Cases</h2>
-            
-            <h3>🧠 1. Graph Neural Networks (GNN)</h3>
-            <p>Build recommendation engines and fraud detection locally. Store user relationships as edges and properties as JSON documents. Train models by querying the <code>ArangoDB</code> network directly.</p>
+        <div class="card" id="multi-model">
+            <h2>2. Data Locality & Multi-Model Architecture</h2>
+            <p><strong>The Core Problem:</strong> Modern apps need different ways to query data. A user profile is a "Document". Their friend network is a "Graph". Storing these in two separate databases means copying data across a network (causing latency and synchronization bugs).</p>
+            <p><strong>First Principles Solution:</strong> Bring the querying engine to the data, rather than the data to the engine. By using a <strong>Multi-Model Database like ArangoDB</strong>, data is stored once, but can be viewed and queried as a document, a graph, or a key-value store, resulting in zero network-hop latency between data domains.</p>
+        </div>
 
-            <h3>⚡ 2. Edge Deployments with Fly.io</h3>
-            <p>Push your app to Fly.io globally. With ArangoDB running closer to your users, graph traversal latency drops significantly compared to central-only databases.</p>
+        <div class="card" id="edge-computing">
+            <h2>3. The Speed of Light & Edge Computing</h2>
+            <p><strong>The Core Problem:</strong> Information cannot travel faster than the speed of light. If a user in Tokyo clicks a button, and the server is in New York, the data physically takes too long to travel back and forth, resulting in noticeable lag (latency).</p>
+            <p><strong>First Principles Solution:</strong> Move the computer closer to the human. <strong>Fly.io</strong> achieves this by converting containers into highly optimized micro-VMs that boot in milliseconds on servers located physically in Tokyo, London, Sydney, etc. This ensures the physical distance the data must travel is minimal.</p>
+        </div>
 
-            <h3>🔍 3. Advanced AQL Prototyping</h3>
-            <p>Use the local Web Interface (<code>http://localhost:8529</code>) to visually construct and profile ArangoDB Query Language (AQL) queries. Test indexes locally to guarantee performance before production deployment.</p>
+        <div class="card" id="emulation">
+            <h2>4. Hardware Emulation (QEMU)</h2>
+            <p><strong>The Core Problem:</strong> An Apple Silicon Mac uses an ARM-based processor. Cloud servers typically use AMD/Intel (x86_64) processors. Code compiled for one physically cannot be understood by the other.</p>
+            <p><strong>First Principles Solution:</strong> Introduce a translator. When we use <strong>Podman Machine</strong> on macOS, it utilizes QEMU, a software emulator that translates x86 instructions into ARM instructions on the fly, allowing developers to test exact cloud replicas on completely different hardware.</p>
         </div>
     </div>
 
@@ -87,10 +74,12 @@
             else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
+            else if (query.includes('first') || query.includes('principle')) window.location.href = 'first-principles.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
             else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
         }
-            // Add copy buttons to code blocks
+
+        // Add copy buttons to code blocks
         document.querySelectorAll('.code-block').forEach(block => {
             const btn = document.createElement('button');
             btn.className = 'copy-btn';

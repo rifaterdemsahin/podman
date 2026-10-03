@@ -56,3 +56,4 @@ git add .
 git commit -m "Update Podman and ArangoDB configurations"
 git push origin main
 ```
+- `first-principles.html`: Fundamental explanations behind containers, edge computing, and multi-model data.
