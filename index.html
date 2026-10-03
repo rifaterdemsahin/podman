@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podman Local Debug Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #5a67d8; }
+        .card { background: #edf2f7; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #cbd5e0; }
+        th { background-color: #e2e8f0; }
+        .status-dot { display: inline-block; width: 10px; height: 10px; background-color: #48bb78; border-radius: 50%; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Podman & Fly.io Local Dashboard</h1>
+        
+        <div class="card">
+            <h2>Podman Machine Status</h2>
+            <p><span class="status-dot"></span> <strong>State:</strong> Running</p>
+            <p><strong>CPUs:</strong> 2 | <strong>Memory:</strong> 4096 MB | <strong>Rootless:</strong> Yes</p>
+        </div>
+
+        <div class="card">
+            <h2>Fly.io Environment Variables (Emulated)</h2>
+            <ul>
+                <li><strong>FLY_APP_NAME:</strong> local-debug-app</li>
+                <li><strong>PRIMARY_REGION:</strong> ams</li>
+                <li><strong>FLY_ALLOC_ID:</strong> local-alloc-001</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Running Containers</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Container ID</th>
+                        <th>Image</th>
+                        <th>Status</th>
+                        <th>Ports</th>
+                        <th>Logs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>a1b2c3d4e5f6</td>
+                        <td>flyio-debug:latest</td>
+                        <td>Up 2 hours</td>
+                        <td>0.0.0.0:8080->80/tcp</td>
+                        <td><a href="#">View Logs</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
