@@ -71,3 +71,4 @@ Optionally, install the visual interface if you prefer managing containers outsi
 ```bash
 brew install podman-desktop
 ```
+- [`aql.html`](https://rifaterdemsahin.github.io/podman/aql.html): Explanation of AQL graph queries and their importance for Contextual AI and Second Brains.

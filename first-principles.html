@@ -73,6 +73,7 @@
             <img src="https://github.com/rifaterdemsahin/podman/actions/workflows/pages.yml/badge.svg" alt="Deploy static content to Pages" style="vertical-align: middle;">
         </p>
         <p id="commit-status" style="font-family: monospace; color: #a0aec0; margin-top: 5px;">Fetching latest commit...</p>
+        <p style="margin-top: 10px; font-size: 12px;"><a href="#" onclick="localStorage.removeItem('tour_dismissed'); window.location.href='index.html'; return false;">🔄 Reset Guide Bot Tour</a></p>
     </footer>
 
     <script>
@@ -116,6 +117,7 @@
                     <a href="first-principles.html">First Principles</a>
                     <a href="usecases.html">Use Cases</a>
                     <a href="metadata.html">Metadata Analysis</a>
+                    <a href="aql.html">AQL & Second Brains</a>
                     <a href="references.html">References</a>
                 </div>
             </div>
@@ -241,6 +243,7 @@
             else if (query.includes('first') || query.includes('principle')) window.location.href = 'first-principles.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
             else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
+            else if (query.includes('aql') || query.includes('brain') || query.includes('ai')) window.location.href = 'aql.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
             else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
         }
@@ -265,7 +268,8 @@
             { url: "index.html", title: "First Principles", text: "Welcome! This is the main dashboard. Let's start the learning tour." },
             { url: "first-principles.html", title: "Use Cases", text: "Before tools, let's understand the physics and logic behind edge computing." },
             { url: "usecases.html", title: "Metadata", text: "Here are the practical architectures and use cases for our stack." },
-            { url: "metadata.html", title: "Podman Engine", text: "See how we securely analyze New Zealand energy data without public egress." },
+            { url: "metadata.html", title: "AQL & AI", text: "See how we securely analyze New Zealand energy data without public egress." },
+            { url: "aql.html", title: "Podman Engine", text: "Now let us learn how ArangoDB Graph queries empower AI Second Brains." },
             { url: "podman.html", title: "Desktop GUI", text: "Let's explore Podman, the daemonless engine running our local containers." },
             { url: "podmandesktop.html", title: "ArangoDB", text: "Want a visual interface? Here is how to use Podman Desktop." },
             { url: "arangodb.html", title: "Fly.io Cloud", text: "Learn about ArangoDB, the multi-model database powering our graph queries." },
@@ -294,7 +298,7 @@
                         ${isLast ? 
                           `<button onclick="dismissBot()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">🎉 Finish Tour</button>` : 
                           `<button onclick="window.location.href='${nextStep.url}'" style="width: 100%; padding: 10px; background: var(--btn-bg); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Next: ${nextStep.title} &rarr;</button>`}
-                        <button onclick="dismissBot()" style="width: 100%; padding: 6px; background: transparent; color: var(--nav-text); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 12px;">Skip self-learning</button>
+                        <button onclick="dismissBot()" style="width: 100%; padding: 6px; background: transparent; color: var(--nav-text); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 12px;">I learned! (Dismiss Bot)</button>
                     </div>
                 </div>
             `;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>External References</title>
+    <title>AQL & AI Second Brains</title>
     <style>
         :root {
             --bg-color: #f4f4f9; --text-color: #333; --card-bg: #fff;
@@ -31,6 +31,9 @@
         h2 { margin-top: 30px; }
         a { color: var(--link-color); }
         .card { background: var(--bg-color); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .code-block { position: relative; background-color: #020617; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; border: 1px solid #334155; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .copy-btn:hover { background: #475569; }
         footer { text-align: center; padding: 20px; background: var(--nav-bg); color: var(--nav-text); margin-top: 40px; font-size: 14px; }
         footer a { color: var(--link-color); text-decoration: none; }
         
@@ -103,42 +106,45 @@
     </div>
 
     <div class="container">
-        <h1>📖 External References & Reading</h1>
+        <h1>🧠 AQL and the Age of AI Second Brains</h1>
         
         <div class="card">
-            <h2>Podman Ecosystem</h2>
+            <h2>What is AQL?</h2>
+            <p><strong>AQL (ArangoDB Query Language)</strong> is a declarative language used to query JSON documents and interconnected graph nodes. Unlike traditional SQL, which relies on heavy rigid `JOIN` operations, AQL is designed from the ground up to traverse deep relationships (graphs) fluidly.</p>
+        </div>
+
+        <div class="card">
+            <h2>Why it Matters for AI and "Second Brains"</h2>
+            <p>In the modern age of LLMs (Large Language Models), knowledge management has shifted toward the concept of a "Second Brain"—a digital repository of everything you learn, read, and think.</p>
             <ul>
-                <li><a href="https://podman.io/docs" target="_blank">Official Podman Documentation</a> - CLI references, machine configuration, and volume management.</li>
-                <li><a href="https://podman-desktop.io/" target="_blank">Podman Desktop</a> - Graphical interface downloads and plugin ecosystem.</li>
-                <li><a href="https://github.com/containers/podman" target="_blank">Podman GitHub Repository</a> - Open source engine codebase.</li>
+                <li><strong>Graph-RAG (Retrieval-Augmented Generation):</strong> Standard AI searches just look for matching keywords. By storing your notes in ArangoDB, you can use AQL to instantly fetch not just the note matching "Neural Networks", but <em>every other concept directly linked to it</em> across your entire Second Brain.</li>
+                <li><strong>Contextual Mapping:</strong> AI models hallucinate when they lack context. AQL allows you to feed the AI an entire topological map of how two ideas relate, drastically improving AI reasoning.</li>
             </ul>
         </div>
 
         <div class="card">
-            <h2>Fly.io Cloud Edge</h2>
-            <ul>
-                <li><a href="https://fly.io/docs/" target="_blank">Fly.io Official Docs</a> - Guides on edge deployment, anycast networks, and Machines.</li>
-                <li><a href="https://fly.io/docs/reference/architecture/" target="_blank">Fly.io Architecture</a> - How they convert Docker containers to Firecracker micro-VMs.</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2>ArangoDB (Multi-Model Graph DB)</h2>
-            <ul>
-                <li><a href="https://www.arangodb.com/docs/stable/" target="_blank">ArangoDB Stable Documentation</a> - Query syntax (AQL) and graph deployment.</li>
-                <li><a href="https://www.arangodb.com/tutorials/" target="_blank">ArangoDB Interactive Tutorials</a> - Hands-on use cases for graph data.</li>
-            </ul>
+            <h2>AQL Syntax Example: Finding Related Thoughts</h2>
+            <p>Imagine you want an AI to write a summary of how "Podman" relates to "Edge Computing" in your notes. Using AQL, you can traverse the graph to find the shortest path of connected notes between them:</p>
+            <div class="code-block">
+FOR v, e IN OUTBOUND SHORTEST_PATH
+  'notes/podman' TO 'notes/edge_computing'
+  GRAPH 'second_brain_graph'
+  RETURN v.title
+            </div>
+            <p>This single query retrieves the exact train of thought connecting the two concepts, ready to be sent to an LLM as perfect context.</p>
         </div>
 
         <div class="bidirectional-links">
             <a href="metadata.html">⬅️ Previous: Metadata Analysis</a>
-            <a href="podman.html">Next: Podman CLI ➡️</a>
+            <a href="references.html">Next: References ➡️</a>
         </div>
     </div>
 
     <footer>
         <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
-        <p style="margin-top: 10px; font-size: 12px;"><a href="#" onclick="localStorage.removeItem('tour_dismissed'); window.location.href='index.html'; return false;">🔄 Reset Guide Bot Tour</a></p>
+        <p style="margin-top: 10px; font-size: 12px;">
+            <a href="#" onclick="localStorage.removeItem('tour_dismissed'); window.location.href='index.html'; return false;">🔄 Reset Guide Bot Tour</a>
+        </p>
     </footer>
 
     <script>
@@ -150,12 +156,25 @@
             else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
+            else if (query.includes('aql') || query.includes('brain') || query.includes('ai')) window.location.href = 'aql.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
             else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
-            else if (query.includes('aql') || query.includes('brain') || query.includes('ai')) window.location.href = 'aql.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
             else alert('No specific page found.');
         }
+
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.innerText = '📋 Copy';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.innerText.replace('📋 Copy', '').trim()).then(() => {
+                    btn.innerText = '✅ Copied!';
+                    setTimeout(() => btn.innerText = '📋 Copy', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
     </script>
 </body>
 </html>
