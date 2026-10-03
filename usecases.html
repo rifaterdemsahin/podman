@@ -6,10 +6,15 @@
     <title>Use Cases & Architecture</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; line-height: 1.6; }
-        .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; gap: 20px; }
+        .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-links { display: flex; gap: 15px; flex-wrap: wrap; }
         .nav-bar a { color: #fff; text-decoration: none; font-weight: bold; }
         .nav-bar a:hover { text-decoration: underline; }
+        .search-container { display: flex; gap: 5px; }
+        .search-container input { padding: 5px 10px; border-radius: 4px; border: none; }
+        .search-container button { padding: 5px 10px; border-radius: 4px; border: none; background: #5a67d8; color: white; cursor: pointer; }
         .container { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
         h1 { color: #5a67d8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         h2 { color: #2d3748; margin-top: 30px; }
         .card { background: #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
@@ -18,8 +23,17 @@
 </head>
 <body>
     <div class="nav-bar">
-        <a href="index.html">🏠 Home / Dashboard</a>
-        <a href="usecases.html">💡 Use Cases & Architecture</a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Dashboard</a>
+            <a href="usecases.html">💡 Use Cases</a>
+            <a href="podman.html">🐋 Podman</a>
+            <a href="flyio.html">☁️ Fly.io</a>
+            <a href="arangodb.html">🥑 ArangoDB</a>
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search concepts..." onkeypress="if(event.key === 'Enter') performSearch()">
+            <button onclick="performSearch()">🔍</button>
+        </div>
     </div>
 
     <div class="container">
@@ -61,5 +75,17 @@
             <p>Use the local Web Interface (<code>http://localhost:8529</code>) to visually construct and profile ArangoDB Query Language (AQL) queries. Test indexes locally to guarantee performance before production deployment.</p>
         </div>
     </div>
+
+    <script>
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (query.includes('podman') || query.includes('docker') || query.includes('container')) window.location.href = 'podman.html';
+            else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
+            else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
+            else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
+            else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
+            else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
+        }
+    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podman & ArangoDB Integration</title>
+    <title>Concept: Fly.io</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; line-height: 1.6; }
         .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -14,13 +14,9 @@
         .search-container input { padding: 5px 10px; border-radius: 4px; border: none; }
         .search-container button { padding: 5px 10px; border-radius: 4px; border: none; background: #5a67d8; color: white; cursor: pointer; }
         .container { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
         h1 { color: #5a67d8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         h2 { color: #2d3748; margin-top: 30px; }
         .card { background: #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-        .code-block { background-color: #1a202c; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; }
-        .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
-        .status-green { background-color: #48bb78; }
     </style>
 </head>
 <body>
@@ -39,52 +35,19 @@
     </div>
 
     <div class="container">
-        <h1>🚀 Podman & ArangoDB Dashboard</h1>
-
+        <h1>☁️ Concept: Fly.io</h1>
         <div class="card">
-            <h2>📊 Current Install Status</h2>
-            <p><span class="status-dot status-green"></span> <strong>Podman State:</strong> Installed & Running</p>
-            <p><span class="status-dot status-green"></span> <strong>ArangoDB Container:</strong> Running locally on port 8529</p>
-            <p><strong>Connection string:</strong> <code>http://localhost:8529</code></p>
-            <p><strong>Username:</strong> <code>root</code> | <strong>Password:</strong> <code>password</code></p>
+            <h2>What is Fly.io?</h2>
+            <p><strong>Fly.io</strong> is a platform-as-a-service (PaaS) that transforms standard Docker/OCI containers into micro-VMs running on bare-metal servers positioned in edge data centers all over the world. It brings your application closer to your users to drastically reduce latency.</p>
         </div>
-
         <div class="card">
-            <h2>☁️ Fly.io Deployment Integration</h2>
-            <p>This repository is configured to deploy directly to Fly.io as a static Python web server. To deploy it and interact with it on the cloud:</p>
-            <div class="code-block">
-# 1. Login to Fly.io
-fly auth login
-
-# 2. Launch and deploy the application
-fly launch --name podman-arango-dashboard
-fly deploy
-            </div>
-            <p>Once deployed, you can visit your remote dashboard using <code>fly open</code>.</p>
+            <h2>How Does It Work?</h2>
+            <p>Fly.io intercepts standard HTTP and TCP traffic via their global Anycast network and routes it to the nearest region where your container (Fly Machine) is deployed. Under the hood, it uses Firecracker micro-VMs (the same technology powering AWS Lambda) to provide strong hardware virtualization isolation combined with sub-second boot times.</p>
         </div>
-
         <div class="card">
-            <h2>🛠️ Stage 1: Podman Installation</h2>
-            <div class="code-block">
-brew install podman flyctl
-podman machine init --cpus 2 --memory 4096 --rootful=false
-podman machine start
-            </div>
+            <h2>Why Pair it with Podman?</h2>
+            <p>Because Fly.io builds and deploys standard Docker/OCI images targeting the <code>linux/amd64</code> architecture, developers using Apple Silicon (M1/M2/M3) need a reliable way to emulate and test that architecture locally. Podman natively integrates with QEMU to run <code>amd64</code> containers on Macs, ensuring parity between your local environment and Fly.io's production servers.</p>
         </div>
-
-        <div class="card">
-            <h2>🥑 Stage 2: ArangoDB Container Deployment</h2>
-            <div class="code-block">
-podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arangodb
-            </div>
-            <h3>📝 ArangoDB Container Logs</h3>
-            <div class="code-block">
-2026-10-03T08:11:32.810582Z [1-2] INFO {memory} Available physical memory: 4077903872 bytes
-2026-10-03T08:11:32.823301Z [1-2] INFO {cluster} Starting up with role SINGLE
-2026-10-03T08:11:33.001279Z [1-2] INFO {general} ArangoDB is ready for business. Have fun!
-            </div>
-        </div>
-
     </div>
 
     <script>
