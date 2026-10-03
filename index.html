@@ -82,7 +82,7 @@
 <body>
     <div class="nav-bar">
                 <div class="nav-links">
-            <a href="index.html">🏠 Dashboard</a>
+            <a href="index.html">🏠 Home</a>
             
             <div class="dropdown">
                 <button class="dropbtn">📚 Guides & Concepts</button>
@@ -111,6 +111,41 @@
             <input type="text" id="searchInput" placeholder="Search concepts..." onkeypress="if(event.key === 'Enter') performSearch()">
             <button onclick="performSearch()">🔍</button>
             <button class="theme-btn" onclick="toggleTheme()">🌓 Theme</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>🚀 The Edge AI Architecture Hub</h1>
+        <div style="text-align: center;"><img src="images/dashboard_overview.jpg" alt="Dashboard Overview" class="hero-image" style="max-height: 350px;"></div>
+        
+        <div class="card">
+            <h2>What is this project?</h2>
+            <p>Welcome to the <strong>Edge AI Architecture Hub</strong>. This project serves as a comprehensive, interactive documentation site and sandbox for modern, edge-deployed artificial intelligence and graph database infrastructures.</p>
+            <p>Instead of relying on heavy, centralized cloud providers, this project demonstrates how to build, test, and deploy ultra-fast AI backends using lightweight technologies that push compute physically closer to the user.</p>
+        </div>
+
+        <div class="card">
+            <h2>The Tech Stack</h2>
+            <p>We combine four cutting-edge technologies to achieve this:</p>
+            <ul>
+                <li><strong>Podman:</strong> A daemonless, open-source alternative to Docker for running secure local containers.</li>
+                <li><strong>ArangoDB & AQL:</strong> A multi-model graph database perfect for mapping semantic "Second Brains" and Contextual AI relationships.</li>
+                <li><strong>Fly.io:</strong> A global edge network that transforms your containers into micro-VMs running worldwide.</li>
+                <li><strong>Local UI:</strong> This exact site—a static, responsive HTML/CSS dashboard generated to explain the stack.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>How to Navigate</h2>
+            <p>Use the <strong>Guide Bot</strong> in the bottom left corner to take a guided tour of the concepts, or explore using the top navigation menus.</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="first-principles.html" style="display: inline-block; padding: 12px 24px; background: var(--btn-bg); color: white; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 18px;">Start the Journey &rarr;</a>
+            </div>
+        </div>
+
+        <div class="bidirectional-links">
+            <span></span>
+            <a href="status.html">Next: System Status ➡️</a>
         </div>
     </div>
 
@@ -165,124 +200,4 @@ podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arango
         <div class="bidirectional-links">
             <span></span>
             <a href="first-principles.html">Next: First Principles ➡️</a>
-        </div>
-    </div>
-
-    <footer>
-        <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
-        <p style="margin-top: 10px;">
-            <img src="https://github.com/rifaterdemsahin/podman/actions/workflows/pages.yml/badge.svg" alt="Deploy static content to Pages" style="vertical-align: middle;">
-        </p>
-        <p id="commit-status" style="font-family: monospace; color: #a0aec0; margin-top: 5px;">Fetching latest commit...</p>
-        <p style="margin-top: 10px; font-size: 12px;"><a href="#" onclick="localStorage.removeItem('tour_dismissed'); window.location.href='index.html'; return false;">🔄 Reset Guide Bot Tour</a></p>
-    </footer>
-
-    <script>
-        fetch('https://api.github.com/repos/rifaterdemsahin/podman/commits/main')
-            .then(response => response.json())
-            .then(data => {
-                const commitStatus = document.getElementById('commit-status');
-                const sha = data.sha.substring(0, 7);
-                const msg = data.commit.message.split('\n')[0];
-                commitStatus.innerHTML = `Latest Commit: <a href="${data.html_url}" style="color: #63b3ed; text-decoration: none;" target="_blank">${sha}</a> - ${msg}`;
-            })
-            .catch(error => {
-                document.getElementById('commit-status').innerText = 'Unable to load latest commit.';
-            });
-    </script>
-
-    <script>
-        function performSearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            if (query.includes('podman') || query.includes('docker') || query.includes('container')) window.location.href = 'podman.html';
-            else if (query.includes('desktop') || query.includes('gui')) window.location.href = 'podmandesktop.html';
-            else if (query.includes('test') || query.includes('install') || query.includes('verify')) window.location.href = 'testing.html';
-            else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
-            else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
-            else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
-            else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
-            else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
-            else if (query.includes('aql') || query.includes('brain') || query.includes('ai')) window.location.href = 'aql.html';
-            else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
-            else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
-        }
-            // Add copy buttons to code blocks
-        document.querySelectorAll('.code-block').forEach(block => {
-            const btn = document.createElement('button');
-            btn.className = 'copy-btn';
-            btn.innerText = '📋 Copy';
-            btn.onclick = () => {
-                navigator.clipboard.writeText(block.innerText.replace('📋 Copy', '').trim()).then(() => {
-                    btn.innerText = '✅ Copied!';
-                    setTimeout(() => btn.innerText = '📋 Copy', 2000);
-                });
-            };
-            block.appendChild(btn);
-        });
-    </script>
-
-    <script>
-        const tourSteps = [
-            { url: "index.html", title: "First Principles", text: "Welcome! This is the main dashboard. Let's start the learning tour." },
-            { url: "first-principles.html", title: "Use Cases", text: "Before tools, let's understand the physics and logic behind edge computing." },
-            { url: "usecases.html", title: "Metadata", text: "Here are the practical architectures and use cases for our stack." },
-            { url: "metadata.html", title: "AQL & AI", text: "See how we securely analyze New Zealand energy data without public egress." },
-            { url: "aql.html", title: "Podman Engine", text: "Now let us learn how ArangoDB Graph queries empower AI Second Brains." },
-            { url: "podman.html", title: "Desktop GUI", text: "Let's explore Podman, the daemonless engine running our local containers." },
-            { url: "podmandesktop.html", title: "ArangoDB", text: "Want a visual interface? Here is how to use Podman Desktop." },
-            { url: "arangodb.html", title: "Fly.io Cloud", text: "Learn about ArangoDB, the multi-model database powering our graph queries." },
-            { url: "flyio.html", title: "Verify Install", text: "Let's look at how we deploy these containers to the edge using Fly.io." },
-            { url: "testing.html", title: "Done!", text: "You made it! Follow this guide to verify your own local installation." }
-        ];
-
-        function initBot() {
-            if (localStorage.getItem('tour_dismissed') === 'true') return;
-
-            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-            let currentIndex = tourSteps.findIndex(s => s.url === currentPath);
-            if (currentIndex === -1) currentIndex = 0;
-
-            const isLast = currentIndex === tourSteps.length - 1;
-            const nextStep = isLast ? null : tourSteps[currentIndex + 1];
-
-            const botHtml = `
-                <div id="guide-bot" style="position: fixed; bottom: 20px; left: 20px; width: 280px; background: var(--nav-bg); color: var(--nav-text); padding: 15px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 9999; border: 2px solid var(--link-color); font-family: -apple-system, sans-serif; transition: 0.3s;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
-                        <strong style="font-size: 15px; display: flex; align-items: center; gap: 5px;">🤖 Guide Bot <span style="font-size: 11px; background: var(--link-color); color: #fff; padding: 2px 6px; border-radius: 10px;">${currentIndex + 1}/${tourSteps.length}</span></strong>
-                        <button onclick="dismissBot()" style="background: none; border: none; color: var(--nav-text); cursor: pointer; font-size: 20px; line-height: 1; padding: 0;">&times;</button>
-                    </div>
-                    <p style="font-size: 14px; margin: 0 0 15px 0; line-height: 1.4;">${tourSteps[currentIndex].text}</p>
-                    <div style="display: flex; gap: 10px; flex-direction: column;">
-                        ${isLast ? 
-                          `<button onclick="dismissBot()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">🎉 Finish Tour</button>` : 
-                          `<button onclick="window.location.href='${nextStep.url}'" style="width: 100%; padding: 10px; background: var(--btn-bg); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Next: ${nextStep.title} &rarr;</button>`}
-                        <button onclick="dismissBot()" style="width: 100%; padding: 6px; background: transparent; color: var(--nav-text); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 12px;">I learned! (Dismiss Bot)</button>
-                    </div>
-                </div>
-            `;
-
-            document.body.insertAdjacentHTML('beforeend', botHtml);
-        }
-
-        function dismissBot() {
-            localStorage.setItem('tour_dismissed', 'true');
-            const bot = document.getElementById('guide-bot');
-            if (bot) {
-                bot.style.opacity = '0';
-                setTimeout(() => bot.remove(), 300);
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', initBot);
-    </script>
-
-    <!-- Mermaid JS Integration -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            mermaid.initialize({ startOnLoad: true, theme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'default' });
-        });
-    </script>
-
-</body>
-</html>
+        

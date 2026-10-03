@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podman Desktop</title>
+    <title>Podman & ArangoDB Integration</title>
     
     <style>
         :root {
@@ -116,45 +116,56 @@
     </div>
 
     <div class="container">
-        <h1>🖥️ Podman Desktop</h1>
-        
+        <h1>📈 System Status (Emulated)</h1>
+        <div style="text-align: center;"><img src="images/dashboard_overview.jpg" alt="Dashboard Overview" class="hero-image" style="max-height: 350px;"></div>
+
         <div class="card">
-            <h2>What is Podman Desktop?</h2>
-            <p>If you miss the visual interface of Docker Desktop, <strong>Podman Desktop</strong> is the official open-source GUI for managing your Podman containers, images, and pods without needing to use the terminal.</p>
-            <div style="text-align: center;">
-                <img src="https://podman-desktop.io/img/screenshots/containers.png" alt="Podman Desktop GUI Interface" class="hero-image">
+            <h2>📊 Current Install Status</h2>
+            <p><span class="status-dot status-green"></span> <strong>Podman State:</strong> Installed & Running</p>
+            <p><span class="status-dot status-green"></span> <strong>ArangoDB Container:</strong> Running locally on port 8529</p>
+            <p><strong>Connection string:</strong> <code>http://localhost:8529</code></p>
+            <p><strong>Username:</strong> <code>root</code> | <strong>Password:</strong> <code>password</code></p>
+        </div>
+
+        <div class="card">
+            <h2>☁️ Fly.io Deployment Integration</h2>
+            <p>This repository is configured to deploy directly to Fly.io as a static Python web server. To deploy it and interact with it on the cloud:</p>
+            <div class="code-block">
+# 1. Login to Fly.io
+fly auth login
+
+# 2. Launch and deploy the application
+fly launch --name podman-arango-dashboard
+fly deploy
+            </div>
+            <p>Once deployed, you can visit your remote dashboard using <code>fly open</code>.</p>
+        </div>
+
+        <div class="card">
+            <h2>🛠️ Stage 1: Podman Installation <a href="first-principles.html#isolation" style="font-size: 16px; text-decoration: none;">[🤔 Rationale]</a></h2>
+            <div class="code-block">
+brew install podman flyctl
+podman machine init --cpus 2 --memory 4096 --rootful=false
+podman machine start
             </div>
         </div>
 
         <div class="card">
-            <h2>Installation via Homebrew</h2>
-            <p>You can easily install Podman Desktop using Homebrew alongside your existing CLI installation.</p>
-            <div class="code-block">brew install podman-desktop</div>
+            <h2>🥑 Stage 2: ArangoDB Container Deployment <a href="first-principles.html#multi-model" style="font-size: 16px; text-decoration: none;">[🤔 Rationale]</a></h2>
+            <div class="code-block">
+podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arangodb
+            </div>
+            <h3>📝 ArangoDB Container Logs</h3>
+            <div class="code-block">
+2026-10-03T08:11:32.810582Z [1-2] INFO {memory} Available physical memory: 4077903872 bytes
+2026-10-03T08:11:32.823301Z [1-2] INFO {cluster} Starting up with role SINGLE
+2026-10-03T08:11:33.001279Z [1-2] INFO {general} ArangoDB is ready for business. Have fun!
+            </div>
         </div>
 
-        <div class="card">
-            <h2>Understanding the Installation Stages</h2>
-            <p>When you run <code>brew install podman-desktop</code>, you may see several terminal messages. Here is exactly what is happening under the hood:</p>
-            <ul>
-                <li><strong>Downloading Homebrew API data:</strong> Homebrew is syncing its package catalog to ensure it fetches the absolute latest version of Podman Desktop (v1.29.3 or newer).</li>
-                <li><strong>Untrusted Taps Warning:</strong> If you see a warning about taps like <code>anomalyco/tap</code>, it just means you have third-party repositories connected to Homebrew. It doesn't affect Podman Desktop, which is securely downloaded from the official core registry.</li>
-                <li><strong>Fetching & Extracting (236MB):</strong> Homebrew downloads the compiled <code>.dmg</code> or binary package directly from Podman's official release servers and unpacks it into your <code>/Applications</code> folder.</li>
-            </ul>
-            <p>Once complete, you can find the GUI application by opening your Mac's <strong>Launchpad</strong> or navigating to <code>/Applications/Podman Desktop.app</code>.</p>
-        </div>
-
-        <div class="card">
-            <h2>Why Use the Desktop App?</h2>
-            <ul>
-                <li><strong>Visual Container Management:</strong> Easily start, stop, and delete containers with a click.</li>
-                <li><strong>Real-time Logs:</strong> View ArangoDB or your Python dashboard logs visually without running <code>podman logs -f</code>.</li>
-                <li><strong>Network & Volume Inspector:</strong> View exposed ports and mounted directories (like our <code>nz-energy.json</code> data volume).</li>
-                <li><strong>Pod Generation:</strong> Generate Kubernetes YAML from your locally running containers natively.</li>
-            </ul>
-        </div>
         <div class="bidirectional-links">
-            <a href="podman.html">⬅️ Previous: Podman</a>
-            <a href="arangodb.html">Next: ArangoDB ➡️</a>
+            <a href="index.html">⬅️ Previous: Home</a>
+            <a href="first-principles.html">Next: First Principles ➡️</a>
         </div>
     </div>
 
@@ -179,7 +190,9 @@
             .catch(error => {
                 document.getElementById('commit-status').innerText = 'Unable to load latest commit.';
             });
+    </script>
 
+    <script>
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             if (query.includes('podman') || query.includes('docker') || query.includes('container')) window.location.href = 'podman.html';
@@ -188,15 +201,13 @@
             else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
-            else if (query.includes('first') || query.includes('principle')) window.location.href = 'first-principles.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
             else if (query.includes('ref') || query.includes('external') || query.includes('docs')) window.location.href = 'references.html';
             else if (query.includes('aql') || query.includes('brain') || query.includes('ai')) window.location.href = 'aql.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
-            else alert('No specific page found for: ' + query + '. Try searching for desktop, test, podman, fly, arango, metadata, or use cases.');
+            else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
         }
-
-        // Add copy buttons to code blocks
+            // Add copy buttons to code blocks
         document.querySelectorAll('.code-block').forEach(block => {
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
