@@ -65,3 +65,4 @@ git add .
 git commit -m "Update Podman and ArangoDB configurations"
 git push origin main
 ```
+- [`testing.html`](https://rifaterdemsahin.github.io/podman/testing.html): Step-by-step guide to verify if Podman is correctly running on your Mac.

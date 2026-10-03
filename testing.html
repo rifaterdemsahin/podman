@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Use Cases & Architecture</title>
+    <title>Test Podman Installation</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; line-height: 1.6; }
         .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -14,15 +14,13 @@
         .search-container input { padding: 5px 10px; border-radius: 4px; border: none; }
         .search-container button { padding: 5px 10px; border-radius: 4px; border: none; background: #5a67d8; color: white; cursor: pointer; }
         .container { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
         h1 { color: #5a67d8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         h2 { color: #2d3748; margin-top: 30px; }
         .card { background: #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-        .diagram { font-family: monospace; background: #1a202c; color: #63b3ed; padding: 20px; border-radius: 6px; white-space: pre; overflow-x: auto; font-size: 16px; line-height: 1.4; }
-            .code-block { position: relative; }
+        .code-block { position: relative; background-color: #1a202c; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; }
         .copy-btn { position: absolute; top: 5px; right: 5px; background: #4a5568; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .copy-btn:hover { background: #2d3748; }
-            footer { text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px; }
+        footer { text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px; }
         footer a { color: #63b3ed; text-decoration: none; }
         footer a:hover { text-decoration: underline; }
     </style>
@@ -46,47 +44,44 @@
     </div>
 
     <div class="container">
-        <h1>💡 ArangoDB Use Cases & Architecture</h1>
-
+        <h1>✅ How to Test Your Podman Installation</h1>
+        
         <div class="card">
-            <h2>🏗️ Why? How? What? (Architectural Overview)</h2>
-            <p>This architecture explains how Podman, Fly.io, and ArangoDB connect to provide a seamless local-to-cloud experience.</p>
-            
-            <div class="diagram">
-  💻 Developer Machine (macOS)
-   ├── 🐋 Podman (Local Container Runtime)
-   │    ├── 🥑 ArangoDB Container [Port 8529]  <-- (Multi-Model Graph DB)
-   │    └── 🌐 Local Dashboard    [Port 30080] <-- (You are here)
-   │
-   ╰──▶ 🚀 Flyctl (Deployment CLI)
-         │
-         ▼
-  ☁️ Fly.io Cloud Platform
-   ├── 📦 Deployed Dashboard App
-   └── 🗄️ Managed ArangoDB / Stateful Volume
-            </div>
-
-            <p><strong>❓ WHY:</strong> We avoid Docker Desktop licensing/overhead by using lightweight <code>podman-machine</code>. ArangoDB consolidates Document and Graph databases into one tool to save memory.</p>
-            <p><strong>🛠️ HOW:</strong> We emulate the <code>linux/amd64</code> architecture locally. Once tested, <code>flyctl</code> pushes the exact same image to Fly.io edge servers.</p>
-            <p><strong>🎯 WHAT:</strong> A reproducible multi-model database environment for building AI & Graph-based applications.</p>
+            <h2>Why can't I "see" Podman?</h2>
+            <p>Unlike Docker Desktop, which has a graphical user interface (GUI) running in your Mac's menu bar, <strong>Podman is a daemonless, CLI-first tool</strong>. This means you will not see an app icon running in your dock. It runs efficiently in the background as a lightweight QEMU virtual machine.</p>
+            <p>If you prefer a GUI to see your containers visually, you can install <a href="https://podman-desktop.io/" target="_blank">Podman Desktop</a>, but it is strictly optional.</p>
         </div>
 
         <div class="card">
-            <h2>🥑 Arango.ai Use Cases</h2>
-            
-            <h3>🧠 1. Graph Neural Networks (GNN)</h3>
-            <p>Build recommendation engines and fraud detection locally. Store user relationships as edges and properties as JSON documents. Train models by querying the <code>ArangoDB</code> network directly.</p>
+            <h2>Step 1: Verify the CLI is Installed</h2>
+            <p>Open your terminal and check if the podman command exists on your system:</p>
+            <div class="code-block">podman --version</div>
+            <p><em>Expected Output:</em> <code>podman version 5.x.x</code></p>
+        </div>
 
-            <h3>⚡ 2. Edge Deployments with Fly.io</h3>
-            <p>Push your app to Fly.io globally. With ArangoDB running closer to your users, graph traversal latency drops significantly compared to central-only databases.</p>
+        <div class="card">
+            <h2>Step 2: Check the Podman Machine Status</h2>
+            <p>Because macOS isn't Linux, Podman needs a tiny background VM to run containers. Check if it's running:</p>
+            <div class="code-block">podman machine list</div>
+            <p><em>Expected Output:</em> You should see <code>podman-machine-default</code> with a <code>*</code> next to it, and the state should say <code>Currently running</code>.</p>
+            <p><strong>If it's stopped, start it:</strong></p>
+            <div class="code-block">podman machine start</div>
+        </div>
 
-            <h3>🔍 3. Advanced AQL Prototyping</h3>
-            <p>Use the local Web Interface (<code>http://localhost:8529</code>) to visually construct and profile ArangoDB Query Language (AQL) queries. Test indexes locally to guarantee performance before production deployment.</p>
+        <div class="card">
+            <h2>Step 3: Run a Test Container</h2>
+            <p>The ultimate test is pulling and running a container from the internet. Run the standard hello-world container:</p>
+            <div class="code-block">podman run --rm hello-world</div>
+            <p><em>Expected Output:</em> A message saying <code>Hello from Docker! This message shows that your installation appears to be working correctly.</code></p>
+        </div>
+
+        <div class="card">
+            <h2>Step 4: Check Active Containers</h2>
+            <p>To see containers that are currently running in the background (like our ArangoDB instance):</p>
+            <div class="code-block">podman ps</div>
         </div>
     </div>
 
-    
-    
     <footer style="text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px;">
         <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
         <p style="margin-top: 10px;">
@@ -107,9 +102,7 @@
             .catch(error => {
                 document.getElementById('commit-status').innerText = 'Unable to load latest commit.';
             });
-    </script>
 
-    <script>
         function performSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             if (query.includes('podman') || query.includes('docker') || query.includes('container')) window.location.href = 'podman.html';
@@ -117,11 +110,13 @@
             else if (query.includes('fly') || query.includes('cloud') || query.includes('deploy')) window.location.href = 'flyio.html';
             else if (query.includes('arango') || query.includes('graph') || query.includes('database')) window.location.href = 'arangodb.html';
             else if (query.includes('use') || query.includes('arch')) window.location.href = 'usecases.html';
+            else if (query.includes('first') || query.includes('principle')) window.location.href = 'first-principles.html';
             else if (query.includes('data') || query.includes('meta')) window.location.href = 'metadata.html';
             else if (query.includes('dash') || query.includes('home')) window.location.href = 'index.html';
-            else alert('No specific page found for: ' + query + '. Try searching for podman, fly, arango, or use cases.');
+            else alert('No specific page found for: ' + query + '. Try searching for test, podman, fly, arango, metadata, or use cases.');
         }
-            // Add copy buttons to code blocks
+
+        // Add copy buttons to code blocks
         document.querySelectorAll('.code-block').forEach(block => {
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
