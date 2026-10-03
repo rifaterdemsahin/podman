@@ -246,5 +246,59 @@ podman run --rm -v $(pwd):/data:Z \
             block.appendChild(btn);
         });
     </script>
+
+    <script>
+        const tourSteps = [
+            { url: "index.html", title: "First Principles", text: "Welcome! This is the main dashboard. Let's start the learning tour." },
+            { url: "first-principles.html", title: "Use Cases", text: "Before tools, let's understand the physics and logic behind edge computing." },
+            { url: "usecases.html", title: "Metadata", text: "Here are the practical architectures and use cases for our stack." },
+            { url: "metadata.html", title: "Podman Engine", text: "See how we securely analyze New Zealand energy data without public egress." },
+            { url: "podman.html", title: "Desktop GUI", text: "Let's explore Podman, the daemonless engine running our local containers." },
+            { url: "podmandesktop.html", title: "ArangoDB", text: "Want a visual interface? Here is how to use Podman Desktop." },
+            { url: "arangodb.html", title: "Fly.io Cloud", text: "Learn about ArangoDB, the multi-model database powering our graph queries." },
+            { url: "flyio.html", title: "Verify Install", text: "Let's look at how we deploy these containers to the edge using Fly.io." },
+            { url: "testing.html", title: "Done!", text: "You made it! Follow this guide to verify your own local installation." }
+        ];
+
+        function initBot() {
+            if (localStorage.getItem('tour_dismissed') === 'true') return;
+
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            let currentIndex = tourSteps.findIndex(s => s.url === currentPath);
+            if (currentIndex === -1) currentIndex = 0;
+
+            const isLast = currentIndex === tourSteps.length - 1;
+            const nextStep = isLast ? null : tourSteps[currentIndex + 1];
+
+            const botHtml = `
+                <div id="guide-bot" style="position: fixed; bottom: 20px; left: 20px; width: 280px; background: var(--nav-bg); color: var(--nav-text); padding: 15px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 9999; border: 2px solid var(--link-color); font-family: -apple-system, sans-serif; transition: 0.3s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                        <strong style="font-size: 15px; display: flex; align-items: center; gap: 5px;">🤖 Guide Bot <span style="font-size: 11px; background: var(--link-color); color: #fff; padding: 2px 6px; border-radius: 10px;">${currentIndex + 1}/${tourSteps.length}</span></strong>
+                        <button onclick="dismissBot()" style="background: none; border: none; color: var(--nav-text); cursor: pointer; font-size: 20px; line-height: 1; padding: 0;">&times;</button>
+                    </div>
+                    <p style="font-size: 14px; margin: 0 0 15px 0; line-height: 1.4;">${tourSteps[currentIndex].text}</p>
+                    <div style="display: flex; gap: 10px; flex-direction: column;">
+                        ${isLast ? 
+                          `<button onclick="dismissBot()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">🎉 Finish Tour</button>` : 
+                          `<button onclick="window.location.href='${nextStep.url}'" style="width: 100%; padding: 10px; background: var(--btn-bg); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Next: ${nextStep.title} &rarr;</button>`}
+                        <button onclick="dismissBot()" style="width: 100%; padding: 6px; background: transparent; color: var(--nav-text); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-size: 12px;">Skip self-learning</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', botHtml);
+        }
+
+        function dismissBot() {
+            localStorage.setItem('tour_dismissed', 'true');
+            const bot = document.getElementById('guide-bot');
+            if (bot) {
+                bot.style.opacity = '0';
+                setTimeout(() => bot.remove(), 300);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', initBot);
+    </script>
 </body>
 </html>
