@@ -57,3 +57,5 @@ git commit -m "Update Podman and ArangoDB configurations"
 git push origin main
 ```
 - `first-principles.html`: Fundamental explanations behind containers, edge computing, and multi-model data.
+- `metadata.html`: Explanation of local data isolation with Podman using NZ Energy Council mock data.
+- `nz-energy.json`: Mock dataset for testing ArangoDB data imports.

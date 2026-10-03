@@ -1,0 +1,34 @@
+[
+  {
+    "Installation_ID": "NZ-WIND-001",
+    "Region": "Manawatū-Whanganui",
+    "Type": "Wind Farm",
+    "Capacity_MW": 119.0,
+    "Status": "Active",
+    "Commissioned_Year": 2004
+  },
+  {
+    "Installation_ID": "NZ-GEO-042",
+    "Region": "Waikato",
+    "Type": "Geothermal",
+    "Capacity_MW": 166.0,
+    "Status": "Active",
+    "Commissioned_Year": 2014
+  },
+  {
+    "Installation_ID": "NZ-HYDRO-012",
+    "Region": "Southland",
+    "Type": "Hydroelectric",
+    "Capacity_MW": 850.0,
+    "Status": "Active",
+    "Commissioned_Year": 1971
+  },
+  {
+    "Installation_ID": "NZ-SOLAR-088",
+    "Region": "Canterbury",
+    "Type": "Solar Grid",
+    "Capacity_MW": 42.5,
+    "Status": "Under Construction",
+    "Commissioned_Year": 2026
+  }
+]
