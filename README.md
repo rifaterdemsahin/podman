@@ -1,16 +1,18 @@
-# Podman & Fly.io Local Debug Environment (ArangoDB Edition)
+# Podman, Fly.io & ArangoDB Local Debug Environment
 
-This project provides a set of tools and configurations to run and debug containers locally on macOS using **Podman**, tailored for deploying to **Fly.io**, with a specific focus on running **ArangoDB** (https://arango.ai).
+This project provides a complete set of tools, configurations, and documentation to run and debug containers locally on macOS using **Podman**, tailored for edge deployments to **Fly.io**, with a focus on running **ArangoDB** for Multi-Model architectures.
 
-## Features
-- **Podman Native**: Runs purely on Podman (`podman-machine`) - No Docker Desktop.
+## 🚀 Features
+- **Podman Native**: Runs purely on Podman (`podman-machine`) - No Docker Desktop required.
 - **ArangoDB Support**: Local instance of ArangoDB for Multi-Model Graph and Document database prototyping.
-- **Local Dashboard**: A simple `index.html` UI for container status and staged documentation.
+- **Static Dashboard UI**: A built-in local dashboard featuring system statuses, architecture diagrams, and concept guides.
+- **Global Search**: Navigate through concepts easily via the integrated search bar.
+- **Fly.io Ready**: Includes `fly.toml` and `Dockerfile` to deploy the entire documentation and dashboard interface natively to the cloud.
 
-## Setup Stages
+## 🛠️ Setup Stages
 
 ### Stage 1: Initialize Podman
-Run the setup script or run commands manually to install dependencies and initialize Podman.
+Run the setup script or run commands manually to install dependencies and initialize Podman on macOS.
 ```bash
 brew install podman flyctl
 podman machine init --cpus 2 --memory 4096 --rootful=false
@@ -18,7 +20,7 @@ podman machine start
 ```
 
 ### Stage 2: Deploy ArangoDB Container
-We use Podman to pull and run ArangoDB.
+We use Podman to pull and run ArangoDB locally.
 ```bash
 podman run -d -p 8529:8529 -e ARANGO_ROOT_PASSWORD=password --name arango arangodb
 ```
@@ -29,9 +31,25 @@ You can run a local server to view the dashboard and logs:
 ```bash
 python3 -m http.server 30080
 ```
-Navigate to `http://localhost:30080` to view the emulated container statuses and ArangoDB use cases.
+Navigate to `http://localhost:30080` to view the emulated container statuses.
 
-## Git Workflow
+### Stage 4: Deploying to Fly.io
+The dashboard is configured for direct deployment to Fly.io. To push it live:
+```bash
+fly auth login
+fly deploy
+fly open
+```
+
+## 📖 Navigation & Concept Pages
+The local dashboard contains several pages to help you understand the architecture:
+- `index.html`: Main dashboard and status checker.
+- `usecases.html`: Architectural diagrams and why we use this stack.
+- `podman.html`: Deep dive into Podman vs Docker Desktop.
+- `flyio.html`: Explanation of Fly.io edge networking.
+- `arangodb.html`: Multi-model database concepts and Graph Neural Networks.
+
+## 💻 Git Workflow
 To commit and push changes:
 ```bash
 git add .
