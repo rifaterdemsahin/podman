@@ -4,36 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concept: ArangoDB</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; line-height: 1.6; }
-        .nav-bar { background-color: #2d3748; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-links { display: flex; gap: 15px; flex-wrap: wrap; }
-        .nav-bar a { color: #fff; text-decoration: none; font-weight: bold; }
-        .nav-bar a:hover { text-decoration: underline; }
-        .search-container { display: flex; gap: 5px; }
-        .search-container input { padding: 5px 10px; border-radius: 4px; border: none; }
-        .search-container button { padding: 5px 10px; border-radius: 4px; border: none; background: #5a67d8; color: white; cursor: pointer; }
-        .container { max-width: 1000px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #5a67d8; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-        h2 { color: #2d3748; margin-top: 30px; }
-        .card { background: #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-            .code-block { position: relative; }
-        .copy-btn { position: absolute; top: 5px; right: 5px; background: #4a5568; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .copy-btn:hover { background: #2d3748; }
-            footer { text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px; }
-        footer a { color: #63b3ed; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
-            .hero-image { max-width: 100%; height: auto; max-height: 150px; display: block; margin: 0 auto 20px; }
     
+    <style>
+        :root {
+            --bg-color: #f4f4f9; --text-color: #333; --card-bg: #fff;
+            --nav-bg: #2d3748; --nav-text: #fff; --border-color: #e2e8f0;
+            --card-border: rgba(0,0,0,0.1); --table-th: #e2e8f0;
+            --link-color: #5a67d8; --btn-bg: #5a67d8;
+        }
+        [data-theme="dark"] {
+            --bg-color: #0f172a; --text-color: #f1f5f9; --card-bg: #1e293b;
+            --nav-bg: #0b1120; --nav-text: #f8fafc; --border-color: #334155;
+            --card-border: rgba(0,0,0,0.5); --table-th: #334155;
+            --link-color: #60a5fa; --btn-bg: #4f46e5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); transition: 0.3s; line-height: 1.6; }
+        .nav-bar { background-color: var(--nav-bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .nav-links { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .nav-bar a, .dropbtn { color: var(--nav-text); text-decoration: none; font-weight: bold; }
+        .nav-bar a:hover { text-decoration: underline; }
+        .search-container { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .search-container input { padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); }
+        .search-container button, .theme-btn { padding: 6px 12px; border-radius: 4px; border: none; background: var(--btn-bg); color: white; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .search-container button:hover, .theme-btn:hover { opacity: 0.8; }
+        .container { max-width: 1000px; margin: 20px auto; background: var(--card-bg); padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px var(--card-border); transition: 0.3s; }
+        h1 { color: var(--link-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+        h2 { margin-top: 30px; }
+        a { color: var(--link-color); }
+        .card { background: var(--bg-color); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .code-block { position: relative; background-color: #020617; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; border: 1px solid #334155; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .copy-btn:hover { background: #475569; }
+        .table-responsive { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--card-bg); }
+        th, td { border: 1px solid var(--border-color); padding: 12px; text-align: left; }
+        th { background-color: var(--table-th); }
+        footer { text-align: center; padding: 20px; background: var(--nav-bg); color: var(--nav-text); margin-top: 40px; font-size: 14px; }
+        footer a { color: var(--link-color); text-decoration: none; }
+        .hero-image { max-width: 100%; height: auto; display: block; margin: 0 auto 20px; border-radius: 8px; box-shadow: 0 4px 6px var(--card-border); }
+        .mermaid { display: flex; justify-content: center; background: #fff; padding: 15px; border-radius: 6px; margin: 15px 0; overflow-x: auto; }
+        
         .dropdown { position: relative; display: inline-block; }
-        .dropdown .dropbtn { font-size: 16px; border: none; outline: none; color: white; padding: 0; background-color: inherit; font-family: inherit; margin: 0; font-weight: bold; cursor: pointer; }
+        .dropdown .dropbtn { font-size: 16px; border: none; outline: none; padding: 0; background-color: inherit; font-family: inherit; margin: 0; cursor: pointer; }
         .dropdown:hover .dropbtn { text-decoration: underline; }
-        .dropdown-content { display: none; position: absolute; background-color: #2d3748; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 4px; top: 100%; left: 0; }
-        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; font-weight: normal; }
-        .dropdown-content a:hover { background-color: #4a5568; border-radius: 4px; text-decoration: none; }
+        .dropdown-content { display: none; position: absolute; background-color: var(--nav-bg); min-width: 180px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 10; border-radius: 6px; top: 100%; left: 0; padding: 5px 0; }
+        .dropdown-content a { color: var(--nav-text); padding: 10px 16px; text-decoration: none; display: block; font-weight: normal; }
+        .dropdown-content a:hover { background-color: var(--bg-color); }
         .dropdown:hover .dropdown-content { display: block; }
+        
+        @media (max-width: 768px) {
+            .nav-bar { flex-direction: column; align-items: stretch; }
+            .nav-links { flex-direction: column; align-items: flex-start; width: 100%; }
+            .dropdown { width: 100%; margin-bottom: 10px; }
+            .dropdown-content { position: static; box-shadow: none; display: none; padding-left: 15px; width: auto; background-color: transparent; }
+            .dropdown:hover .dropdown-content { display: block; }
+            .search-container { width: 100%; justify-content: space-between; }
+            .container { margin: 10px; padding: 15px; }
+        }
     </style>
+
+
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+    </script>
 </head>
+
 <body>
     <div class="nav-bar">
                 <div class="nav-links">
@@ -63,6 +105,7 @@
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search concepts..." onkeypress="if(event.key === 'Enter') performSearch()">
             <button onclick="performSearch()">🔍</button>
+            <button class="theme-btn" onclick="toggleTheme()">🌓 Theme</button>
         </div>
     </div>
 
@@ -85,7 +128,7 @@
 
     
     
-    <footer style="text-align: center; padding: 20px; background: #2d3748; color: white; margin-top: 40px; border-radius: 8px; font-size: 14px;">
+    <footer>
         <p>Built with Podman, Fly.io & ArangoDB | <a href="https://github.com/rifaterdemsahin/podman" style="color: #63b3ed; text-decoration: none;">View on GitHub</a></p>
         <p style="margin-top: 10px;">
             <img src="https://github.com/rifaterdemsahin/podman/actions/workflows/pages.yml/badge.svg" alt="Deploy static content to Pages" style="vertical-align: middle;">
