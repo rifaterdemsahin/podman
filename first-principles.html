@@ -98,6 +98,7 @@
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
+            window.location.reload(); // Reload to re-render Mermaid.js with new theme
         }
     </script>
 </head>

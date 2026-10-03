@@ -72,6 +72,7 @@
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
+            window.location.reload(); // Reload to re-render Mermaid.js with new theme
         }
     </script>
 </head>
@@ -235,5 +236,14 @@
 
         window.addEventListener('DOMContentLoaded', initBot);
     </script>
+
+    <!-- Mermaid JS Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            mermaid.initialize({ startOnLoad: true, theme: localStorage.getItem('theme') === 'dark' ? 'dark' : 'default' });
+        });
+    </script>
+
 </body>
 </html>
